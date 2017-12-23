@@ -33,7 +33,11 @@ public class WebhookController {
             if(request != null) {
                 params.putAll(request);
             }
-            return this.driver.handleMessages(headers, params);
+            ResponseEntity<Object> verifyResult = driver.verifyRequest(headers, params);
+            if(verifyResult != null) {
+                return verifyResult;
+            }
+            this.driver.handleMessages(headers, params);
         } catch (Exception e) {
             LOGGER.error("Failed to process incomming event request", e);
         }

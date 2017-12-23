@@ -1,0 +1,5 @@
+ferbot:
+  facebook:
+    verification: xxx
+    access_token: xxx
+    secret: xxx
