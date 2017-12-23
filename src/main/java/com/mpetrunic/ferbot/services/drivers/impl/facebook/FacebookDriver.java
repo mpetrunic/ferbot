@@ -2,6 +2,7 @@ package com.mpetrunic.ferbot.services.drivers.impl.facebook;
 
 import com.mpetrunic.ferbot.services.drivers.IChatDriver;
 import com.mpetrunic.ferbot.services.facebook.FacebookMessenger;
+import com.mpetrunic.ferbot.services.facebook.FacebookSenderActionFactory;
 import com.mpetrunic.ferbot.services.facebook.OutgoingFacebookMessage;
 import com.mpetrunic.ferbot.services.messages.ResponseMessage;
 import com.mpetrunic.ferbot.services.routing.ChatbotRouter;
@@ -18,6 +19,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class FacebookDriver implements IChatDriver {
@@ -80,8 +83,38 @@ public class FacebookDriver implements IChatDriver {
         Map<String, Object> entry = ((List<Map<String, Object>>) params.get("entry")).get(0);
         for(Map<String, Object> messageParams :  (ArrayList<Map<String, Object>>)entry.getOrDefault("messaging", new ArrayList<>())) {
             IncomingFacebookMessage message = new IncomingFacebookMessage(messageParams);
+            this.markSeen(message);
             LOGGER.info(message.toString());
             this.router.handleMessage(this, message);
+        }
+    }
+
+    @Override
+    public void markSeen(IncomingFacebookMessage message) {
+        try {
+            this.messenger.sendMessage(FacebookSenderActionFactory.seenRequest(message.getSender()));
+        } catch (IOException e) {
+            LOGGER.error("Failed to mark message as seen");
+        }
+    }
+
+    @Override
+    public void types(IncomingFacebookMessage message) {
+        try {
+            this.messenger.sendMessage(FacebookSenderActionFactory.typingOnRequest(message.getSender()));
+        } catch (IOException e) {
+            LOGGER.error("Failed to turn on typing");
+        }
+    }
+
+    @Override
+    public void typesAndWaits(IncomingFacebookMessage message) {
+        try {
+            this.messenger.sendMessage(FacebookSenderActionFactory.typingOnRequest(message.getSender()));
+            TimeUnit.MILLISECONDS.sleep(new Random().nextInt(300) + 300);
+        } catch (IOException e) {
+            LOGGER.error("Failed to turn on typing");
+        } catch (InterruptedException ignored) {
         }
     }
 

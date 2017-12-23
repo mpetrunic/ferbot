@@ -24,8 +24,8 @@ public class ChatbotRouteContainer {
 
     public void register(String pattern, String responseText) {
         this.register(pattern, (driver, incomingFacebookMessage) -> {
+            driver.typesAndWaits(incomingFacebookMessage);
             driver.sendResponse(new ResponseMessage(incomingFacebookMessage.getRecipient(), incomingFacebookMessage.getSender(), responseText));
-
         });
     }
 

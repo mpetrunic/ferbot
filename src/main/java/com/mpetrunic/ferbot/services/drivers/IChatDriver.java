@@ -1,5 +1,6 @@
 package com.mpetrunic.ferbot.services.drivers;
 
+import com.mpetrunic.ferbot.services.drivers.impl.facebook.IncomingFacebookMessage;
 import com.mpetrunic.ferbot.services.messages.ResponseMessage;
 import org.springframework.http.ResponseEntity;
 
@@ -12,6 +13,12 @@ public interface IChatDriver {
     boolean isRequestValid(Map<String, String> headers, Map<String, Object> request);
 
     void handleMessages(Map<String, String> headers, Map<String, Object> params);
+
+    void markSeen(IncomingFacebookMessage message);
+
+    void types(IncomingFacebookMessage message);
+
+    void typesAndWaits(IncomingFacebookMessage message);
 
     void sendResponse(ResponseMessage responseMessage);
 }
