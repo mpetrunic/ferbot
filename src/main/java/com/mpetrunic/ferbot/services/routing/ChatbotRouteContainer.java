@@ -5,14 +5,14 @@ import com.mpetrunic.ferbot.services.drivers.impl.facebook.IncomingFacebookMessa
 import com.mpetrunic.ferbot.services.messages.ResponseMessage;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
 @Service
 public class ChatbotRouteContainer {
 
-    private Map<Pattern, ResponseAction<IChatDriver, IncomingFacebookMessage>> routes = new HashMap<>();
+    private Map<Pattern, ResponseAction<IChatDriver, IncomingFacebookMessage>> routes = new LinkedHashMap<>();
 
     public ChatbotRouteContainer() {
         register("bok", "Bok i tebi!");
@@ -34,4 +34,8 @@ public class ChatbotRouteContainer {
         return routes;
     }
 
+    public ResponseAction<IChatDriver, IncomingFacebookMessage> getFallback() {
+        return (driver, message) -> {
+        };
+    }
 }
