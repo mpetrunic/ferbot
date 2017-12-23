@@ -1,6 +1,8 @@
 package com.mpetrunic.ferbot.services.drivers.impl.facebook;
 
 import com.mpetrunic.ferbot.services.drivers.IChatDriver;
+import com.mpetrunic.ferbot.services.messages.ResponseMessage;
+import com.mpetrunic.ferbot.services.routing.ChatbotRouter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,15 +27,19 @@ public class FacebookDriver implements IChatDriver {
 
     private String accessToken;
 
+    private ChatbotRouter router;
+
     @Autowired
     public FacebookDriver(
             @Value("${ferbot.facebook.verification}") String verification,
             @Value("${ferbot.facebook.secret}") String secret,
-            @Value("${ferbot.facebook.page.access_token}") String accessToken
+            @Value("${ferbot.facebook.page.access_token}") String accessToken,
+            ChatbotRouter router
     ) {
         this.verification = verification;
         this.secret = secret;
         this.accessToken = accessToken;
+        this.router = router;
     }
 
     @Override
@@ -70,9 +76,15 @@ public class FacebookDriver implements IChatDriver {
     public void handleMessages(Map<String, String> headers, Map<String, Object> params) {
         Map<String, Object> entry = ((List<Map<String, Object>>) params.get("entry")).get(0);
         for(Map<String, Object> messageParams :  (ArrayList<Map<String, Object>>)entry.getOrDefault("messaging", new ArrayList<>())) {
-            IncommingFacebookMessage message = new IncommingFacebookMessage(messageParams);
+            IncomingFacebookMessage message = new IncomingFacebookMessage(messageParams);
             LOGGER.info(message.toString());
+            this.router.handleMessage(this, message);
         }
+    }
+
+    @Override
+    public void sendResponse(ResponseMessage responseMessage) {
+        LOGGER.info("Sending response -> {}", responseMessage);
     }
 
 }

@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TimeZone;
 
-public class IncommingFacebookMessage {
+public class IncomingFacebookMessage {
 
     private String sender;
 
@@ -22,7 +22,7 @@ public class IncommingFacebookMessage {
 
     private String text;
 
-    public IncommingFacebookMessage(Map<String, Object> message) {
+    public IncomingFacebookMessage(Map<String, Object> message) {
         type = MessageType.TEXT;
         this.sender = (String) ((Map<String, Object>)message.getOrDefault("sender", new HashMap<>())).getOrDefault("id", "");
         this.recipient = (String) ((Map<String, Object>)message.getOrDefault("recipient", new HashMap<>())).getOrDefault("id", "");
@@ -99,7 +99,7 @@ public class IncommingFacebookMessage {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        IncommingFacebookMessage that = (IncommingFacebookMessage) o;
+        IncomingFacebookMessage that = (IncomingFacebookMessage) o;
 
         return mid != null ? mid.equals(that.mid) : that.mid == null;
     }
@@ -111,7 +111,7 @@ public class IncommingFacebookMessage {
 
     @Override
     public String toString() {
-        return "IncommingFacebookMessage{" +
+        return "IncomingFacebookMessage{" +
                 "sender='" + sender + '\'' +
                 ", recipient='" + recipient + '\'' +
                 ", timestamp=" + timestamp +
