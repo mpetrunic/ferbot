@@ -1,4 +1,7 @@
 ferbot:
+  wit:
+    url:
+    access_token: xxx
   facebook:
     verification: xxx
     secret: xxx
