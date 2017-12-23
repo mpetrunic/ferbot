@@ -1,5 +1,8 @@
 ferbot:
   facebook:
     verification: xxx
-    access_token: xxx
     secret: xxx
+    page:
+      access_token: xxx
+    messenger:
+      url: https://graph.facebook.com/v2.6/me/messages

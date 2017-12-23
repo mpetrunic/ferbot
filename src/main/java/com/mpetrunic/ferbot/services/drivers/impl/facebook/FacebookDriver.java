@@ -1,6 +1,8 @@
 package com.mpetrunic.ferbot.services.drivers.impl.facebook;
 
 import com.mpetrunic.ferbot.services.drivers.IChatDriver;
+import com.mpetrunic.ferbot.services.facebook.FacebookMessenger;
+import com.mpetrunic.ferbot.services.facebook.OutgoingFacebookMessage;
 import com.mpetrunic.ferbot.services.messages.ResponseMessage;
 import com.mpetrunic.ferbot.services.routing.ChatbotRouter;
 import org.slf4j.Logger;
@@ -12,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -25,7 +28,7 @@ public class FacebookDriver implements IChatDriver {
 
     private String secret;
 
-    private String accessToken;
+    private FacebookMessenger messenger;
 
     private ChatbotRouter router;
 
@@ -33,12 +36,12 @@ public class FacebookDriver implements IChatDriver {
     public FacebookDriver(
             @Value("${ferbot.facebook.verification}") String verification,
             @Value("${ferbot.facebook.secret}") String secret,
-            @Value("${ferbot.facebook.page.access_token}") String accessToken,
+            FacebookMessenger messenger,
             ChatbotRouter router
     ) {
         this.verification = verification;
         this.secret = secret;
-        this.accessToken = accessToken;
+        this.messenger = messenger;
         this.router = router;
     }
 
@@ -85,6 +88,11 @@ public class FacebookDriver implements IChatDriver {
     @Override
     public void sendResponse(ResponseMessage responseMessage) {
         LOGGER.info("Sending response -> {}", responseMessage);
+        try {
+            messenger.sendMessage(new OutgoingFacebookMessage(responseMessage.getRecipient(), responseMessage.getText()));
+        } catch (IOException e) {
+            LOGGER.error("Failed to send message to facebook messenger", e);
+        }
     }
 
 }
