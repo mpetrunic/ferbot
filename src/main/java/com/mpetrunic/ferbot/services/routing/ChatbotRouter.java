@@ -19,8 +19,9 @@ public class ChatbotRouter {
 
     public void handleMessage(IChatDriver driver, IncomingFacebookMessage message) {
         this.routeContainer.getRoutes().forEach((pattern, responseAction) -> {
+            String intent = message.getExtras().getIntent();
             Matcher m = pattern.matcher(message.getText());
-            if(m.matches()) {
+            if (pattern.pattern().equals(intent) || m.matches()) {
                 responseAction.apply(driver, message);
             }
         });

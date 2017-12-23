@@ -16,6 +16,7 @@ public class ChatbotRouteContainer {
 
     public ChatbotRouteContainer() {
         register("bok", "Bok i tebi!");
+        register("HELLO", "Bokić");
     }
 
     public void register(String pattern, ResponseAction<IChatDriver, IncomingFacebookMessage> action) {

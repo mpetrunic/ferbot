@@ -5,6 +5,7 @@ import com.mpetrunic.ferbot.services.facebook.FacebookMessenger;
 import com.mpetrunic.ferbot.services.facebook.FacebookSenderActionFactory;
 import com.mpetrunic.ferbot.services.facebook.OutgoingFacebookMessage;
 import com.mpetrunic.ferbot.services.messages.ResponseMessage;
+import com.mpetrunic.ferbot.services.middleware.IMiddleware;
 import com.mpetrunic.ferbot.services.routing.ChatbotRouter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +35,8 @@ public class FacebookDriver implements IChatDriver {
     private FacebookMessenger messenger;
 
     private ChatbotRouter router;
+
+    private List<IMiddleware> middlewares = new ArrayList<>();
 
     @Autowired
     public FacebookDriver(
@@ -84,6 +87,9 @@ public class FacebookDriver implements IChatDriver {
         for(Map<String, Object> messageParams :  (ArrayList<Map<String, Object>>)entry.getOrDefault("messaging", new ArrayList<>())) {
             IncomingFacebookMessage message = new IncomingFacebookMessage(messageParams);
             this.markSeen(message);
+            for (IMiddleware middleware : middlewares) {
+                message = middleware.next(message);
+            }
             LOGGER.info(message.toString());
             this.router.handleMessage(this, message);
         }
@@ -126,6 +132,11 @@ public class FacebookDriver implements IChatDriver {
         } catch (IOException e) {
             LOGGER.error("Failed to send message to facebook messenger", e);
         }
+    }
+
+    @Override
+    public void addMiddleware(IMiddleware middleware) {
+        this.middlewares.add(middleware);
     }
 
 }

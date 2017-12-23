@@ -2,6 +2,7 @@ package com.mpetrunic.ferbot.services.drivers;
 
 import com.mpetrunic.ferbot.services.drivers.impl.facebook.IncomingFacebookMessage;
 import com.mpetrunic.ferbot.services.messages.ResponseMessage;
+import com.mpetrunic.ferbot.services.middleware.IMiddleware;
 import org.springframework.http.ResponseEntity;
 
 import java.util.Map;
@@ -21,4 +22,6 @@ public interface IChatDriver {
     void typesAndWaits(IncomingFacebookMessage message);
 
     void sendResponse(ResponseMessage responseMessage);
+
+    void addMiddleware(IMiddleware middleware);
 }

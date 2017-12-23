@@ -1,6 +1,7 @@
 package com.mpetrunic.ferbot.controllers;
 
 import com.mpetrunic.ferbot.services.drivers.IChatDriver;
+import com.mpetrunic.ferbot.services.middleware.impl.WitAiMiddleware;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,8 +20,9 @@ public class WebhookController {
     private IChatDriver driver;
 
     @Autowired
-    public WebhookController(IChatDriver driver) {
+    public WebhookController(IChatDriver driver, WitAiMiddleware middleware) {
         this.driver = driver;
+        this.driver.addMiddleware(middleware);
     }
 
     @RequestMapping(path = "/api/v1/webhook", method = {RequestMethod.GET, RequestMethod.POST})

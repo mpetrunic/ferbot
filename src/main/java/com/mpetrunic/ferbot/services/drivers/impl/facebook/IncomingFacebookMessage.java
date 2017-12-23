@@ -22,6 +22,9 @@ public class IncomingFacebookMessage {
 
     private String text;
 
+    private Extras extras = new Extras();
+
+    @SuppressWarnings("unchecked")
     public IncomingFacebookMessage(Map<String, Object> message) {
         type = MessageType.TEXT;
         this.sender = (String) ((Map<String, Object>)message.getOrDefault("sender", new HashMap<>())).getOrDefault("id", "");
@@ -30,7 +33,6 @@ public class IncomingFacebookMessage {
             this.timestamp = LocalDateTime.ofInstant(Instant.ofEpochMilli((Long) message.get("timestamp")),
                     TimeZone.getDefault().toZoneId());
         }
-        @SuppressWarnings("unchecked")
         Map<String, Object> messageContent = (Map<String, Object>) message.getOrDefault("message", new HashMap<>());
         this.mid = (String) messageContent.getOrDefault("mid", "");
         this.seq = (Integer) messageContent.getOrDefault("seq", 0);
@@ -94,6 +96,14 @@ public class IncomingFacebookMessage {
         this.seq = seq;
     }
 
+    public Extras getExtras() {
+        return extras;
+    }
+
+    public void setExtras(Extras extras) {
+        this.extras = extras;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -119,6 +129,7 @@ public class IncomingFacebookMessage {
                 ", mid='" + mid + '\'' +
                 ", seq=" + seq +
                 ", text='" + text + '\'' +
+                ", extras=" + extras +
                 '}';
     }
 }
