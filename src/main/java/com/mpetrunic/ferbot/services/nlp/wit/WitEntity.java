@@ -36,4 +36,13 @@ public class WitEntity {
     public void setConfidence(Double confidence) {
         this.confidence = confidence;
     }
+
+    @Override
+    public String toString() {
+        return "WitEntity{" +
+                "type='" + type + '\'' +
+                ", value='" + value + '\'' +
+                ", confidence=" + confidence +
+                '}';
+    }
 }

@@ -2,6 +2,7 @@ package com.mpetrunic.ferbot.services.drivers.impl.facebook;
 
 import com.mpetrunic.ferbot.services.drivers.IChatDriver;
 import com.mpetrunic.ferbot.services.facebook.FacebookMessenger;
+import com.mpetrunic.ferbot.services.facebook.FacebookMessengerRequest;
 import com.mpetrunic.ferbot.services.facebook.FacebookSenderActionFactory;
 import com.mpetrunic.ferbot.services.facebook.OutgoingFacebookMessage;
 import com.mpetrunic.ferbot.services.messages.ResponseMessage;
@@ -129,6 +130,15 @@ public class FacebookDriver implements IChatDriver {
         LOGGER.info("Sending response -> {}", responseMessage);
         try {
             messenger.sendMessage(new OutgoingFacebookMessage(responseMessage.getRecipient(), responseMessage.getText()));
+        } catch (IOException e) {
+            LOGGER.error("Failed to send message to facebook messenger", e);
+        }
+    }
+
+    public void sendResponse(FacebookMessengerRequest responseMessage) {
+        LOGGER.info("Sending response -> {}", responseMessage);
+        try {
+            messenger.sendMessage(responseMessage);
         } catch (IOException e) {
             LOGGER.error("Failed to send message to facebook messenger", e);
         }

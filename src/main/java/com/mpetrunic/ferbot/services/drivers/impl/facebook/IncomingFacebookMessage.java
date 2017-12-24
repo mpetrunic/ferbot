@@ -33,11 +33,16 @@ public class IncomingFacebookMessage {
             this.timestamp = LocalDateTime.ofInstant(Instant.ofEpochMilli((Long) message.get("timestamp")),
                     TimeZone.getDefault().toZoneId());
         }
-        Map<String, Object> messageContent = (Map<String, Object>) message.getOrDefault("message", new HashMap<>());
-        this.mid = (String) messageContent.getOrDefault("mid", "");
-        this.seq = (Integer) messageContent.getOrDefault("seq", 0);
-        this.text = (String) messageContent.getOrDefault("text", "");
-
+        if (message.containsKey("message")) {
+            Map<String, Object> messageContent = (Map<String, Object>) message.getOrDefault("message", new HashMap<>());
+            this.mid = (String) messageContent.getOrDefault("mid", "");
+            this.seq = (Integer) messageContent.getOrDefault("seq", 0);
+            this.text = (String) messageContent.getOrDefault("text", "");
+        }
+        if (message.containsKey("postback")) {
+            Map<String, Object> messageContent = (Map<String, Object>) message.getOrDefault("postback", new HashMap<>());
+            this.text = (String) messageContent.getOrDefault("payload", "");
+        }
     }
 
     public String getSender() {

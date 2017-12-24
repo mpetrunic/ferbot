@@ -16,6 +16,7 @@ public class HelpAction implements ResponseAction<IChatDriver, IncomingFacebookM
             ((FacebookDriver) driver).sendResponse(
                     new ButtonTemplate("Ovo su neke stvari s kojima ti mogu pomoći:")
                             .addButton(FacebookButtonFactory.postback("Ime fakulteta?", "FULL_NAME"))
+                            .addButton(FacebookButtonFactory.postback("Radno vrijeme?", "WORKING_HOURS"))
                             .build(message.getSender())
             );
         }

@@ -47,4 +47,13 @@ public class WitResponse {
         results.sort(Comparator.comparing(WitEntity::getConfidence));
         return results;
     }
+
+    @Override
+    public String toString() {
+        return "WitResponse{" +
+                "msgId='" + msgId + '\'' +
+                ", text='" + text + '\'' +
+                ", entities=" + entities +
+                '}';
+    }
 }

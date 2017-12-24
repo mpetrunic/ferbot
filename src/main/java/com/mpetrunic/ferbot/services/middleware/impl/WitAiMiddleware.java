@@ -45,6 +45,7 @@ public class WitAiMiddleware implements IMiddleware {
                 return message;
             }
             WitResponse response = witAiService.processInput(message.getText());
+            LOGGER.info("WIt ai -> {}", response.toString());
             List<WitEntity> intents = response.getEntities("intent");
             message.setExtras(new Extras());
             if (intents.size() > 0) {

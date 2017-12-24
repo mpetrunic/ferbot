@@ -6,6 +6,7 @@ import com.mpetrunic.ferbot.services.messages.ResponseMessage;
 import com.mpetrunic.ferbot.services.routing.routes.FullFacultyNameAction;
 import com.mpetrunic.ferbot.services.routing.routes.HelpAction;
 import com.mpetrunic.ferbot.services.routing.routes.WelcomeAction;
+import com.mpetrunic.ferbot.services.routing.routes.WorkingHoursAction;
 import org.springframework.stereotype.Service;
 
 import java.util.LinkedHashMap;
@@ -19,6 +20,7 @@ public class ChatbotRouteContainer {
 
     public ChatbotRouteContainer() {
         register("HELLO", new WelcomeAction());
+        register("WORKING_HOURS", new WorkingHoursAction());
         register("FULL_NAME", new FullFacultyNameAction());
         register("SHOURTCUT_EXPLANATION", "*FER* je kratica za Fakultet elektrotehnike i računarstva!");
         register("HELP", new HelpAction());
