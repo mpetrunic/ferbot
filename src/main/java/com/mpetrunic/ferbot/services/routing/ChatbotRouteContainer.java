@@ -38,6 +38,7 @@ public class ChatbotRouteContainer {
 
     public ResponseAction<IChatDriver, IncomingFacebookMessage> getFallback() {
         return (driver, message) -> {
+            driver.sendResponse(new ResponseMessage(message.getRecipient(), message.getSender(), "Oprosti nisam te razumio :("));
         };
     }
 }
