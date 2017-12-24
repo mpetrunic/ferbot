@@ -3,6 +3,7 @@ package com.mpetrunic.ferbot.services.routing;
 import com.mpetrunic.ferbot.services.drivers.IChatDriver;
 import com.mpetrunic.ferbot.services.drivers.impl.facebook.IncomingFacebookMessage;
 import com.mpetrunic.ferbot.services.messages.ResponseMessage;
+import com.mpetrunic.ferbot.services.routing.routes.WelcomeAction;
 import org.springframework.stereotype.Service;
 
 import java.util.LinkedHashMap;
@@ -15,8 +16,9 @@ public class ChatbotRouteContainer {
     private Map<Pattern, ResponseAction<IChatDriver, IncomingFacebookMessage>> routes = new LinkedHashMap<>();
 
     public ChatbotRouteContainer() {
-        register("bok", "Bok i tebi!");
-        register("HELLO", "Bokić");
+        register("HELLO", new WelcomeAction());
+        register("FULL_NAME", "Puno ime fakulteta je *Fakultet elektrotehnike i računarstva*!");
+        register("SHOURTCUT_EXPLANATION", "*FER* je kratica za Fakultet elektrotehnike i računarstva!");
     }
 
     public void register(String pattern, ResponseAction<IChatDriver, IncomingFacebookMessage> action) {
