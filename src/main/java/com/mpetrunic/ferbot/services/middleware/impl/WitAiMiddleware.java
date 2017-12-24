@@ -41,6 +41,9 @@ public class WitAiMiddleware implements IMiddleware {
     @Override
     public IncomingFacebookMessage next(IncomingFacebookMessage message) {
         try {
+            if (message.getText() == null || message.getText().isEmpty()) {
+                return message;
+            }
             WitResponse response = witAiService.processInput(message.getText());
             List<WitEntity> intents = response.getEntities("intent");
             message.setExtras(new Extras());
