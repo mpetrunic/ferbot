@@ -10,6 +10,7 @@ import com.mpetrunic.ferbot.services.nlp.wit.WitResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -26,8 +27,14 @@ public class WitAiMiddleware implements IMiddleware {
 
     private WitAiService witAiService;
 
+    private Double minConfidence;
+
     @Autowired
-    public WitAiMiddleware(WitAiService witAiService) {
+    public WitAiMiddleware(
+            @Value("${ferbot.wit.minConfidence}") Double minConfidence,
+            WitAiService witAiService
+    ) {
+        this.minConfidence = minConfidence;
         this.witAiService = witAiService;
     }
 
@@ -46,7 +53,7 @@ public class WitAiMiddleware implements IMiddleware {
                     .filter(entry -> !Objects.equals(entry.getKey(), "intent") && entry.getValue().size() > 0)
                     .collect(Collectors.toMap(Map.Entry::getKey, o -> {
                         WitEntity wEntity = o.getValue().stream().sorted(Comparator.comparing(WitEntity::getConfidence)).findFirst().orElse(null);
-                        if (wEntity != null) {
+                        if (wEntity != null && wEntity.getConfidence() >= minConfidence) {
                             return new Entity(wEntity.getType(), wEntity.getValue());
                         }
                         return null;

@@ -1,6 +1,7 @@
 ferbot:
   wit:
-    url:
+    minConfidence: 0.5
+    url: https://api.wit.ai/message
     access_token: xxx
   facebook:
     verification: xxx
