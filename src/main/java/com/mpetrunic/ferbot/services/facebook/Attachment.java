@@ -10,6 +10,11 @@ public class Attachment {
     @Key
     private Template payload;
 
+    public Attachment(Template template) {
+        payload = template;
+        type = "template";
+    }
+
     public String getType() {
         return type;
     }
